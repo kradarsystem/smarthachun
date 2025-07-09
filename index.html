@@ -7,30 +7,35 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Universal box-sizing for consistency */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #ffffff; /* 흰색 배경 */
+            background-color: #ffffff; /* White background */
             color: #333;
-            line-height: 1.3; /* 줄 간격 축소 */
-            overflow: hidden; /* 전체 페이지 스크롤 방지 (iframe 자체 스크롤 방지) */
+            line-height: 1.3; /* Reduced line height */
+            overflow: hidden; /* Prevent overall page scroll (iframe self-scroll prevention) */
             display: flex;
-            flex-direction: column; /* 세로 정렬 */
-            justify-content: flex-start; /* 상단 정렬 */
-            height: 100vh; /* 뷰포트 전체 높이 사용 */
-            padding: 15px; /* 전체 패딩 축소 */
+            flex-direction: column; /* Vertical alignment */
+            justify-content: flex-start; /* Align to top */
+            height: 100vh; /* Use full viewport height */
+            padding: 15px; /* Reduced overall padding */
             box-sizing: border-box;
         }
         .container {
-            max-width: 900px; /* 너비 조정 */
+            max-width: 900px; /* Adjusted width */
             width: 100%;
             margin: 0 auto;
-            flex-grow: 1; /* 남은 공간 차지 */
+            flex-grow: 1; /* Take up remaining space */
             display: flex;
             flex-direction: column;
             background-color: #f9f9f9;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            overflow: hidden; /* 내부 스크롤 방지 (컨테이너 자체) */
+            overflow: hidden; /* Prevent internal scroll (container itself) */
         }
         .header {
             text-align: center;
@@ -39,54 +44,65 @@
             border-top-left-radius: 12px;
             border-top-right-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-            flex-shrink: 0; /* 헤더가 줄어들지 않도록 */
+            flex-shrink: 0; /* Prevent header from shrinking */
         }
         .header h1 {
-            font-size: 2rem; /* 헤더 제목 크기 조정 */
+            font-size: 2rem; /* Adjusted header title font size */
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 5px; /* 마진 축소 */
+            margin-bottom: 5px; /* Reduced margin */
         }
         .header p {
-            font-size: 0.9rem; /* 헤더 설명 크기 조정 */
+            font-size: 0.9rem; /* Adjusted header description font size */
             color: #666;
         }
 
-        /* Fixed table header */
-        .table-header {
-            display: grid;
-            grid-template-columns: 1.5fr 2fr 2fr 0.5fr; /* 구분, 가이드라인, 제안 제품, 준수 여부 */
-            gap: 1px; /* 셀 간격 */
-            background-color: #2c3e50; /* 어두운 배경 */
-            color: #ffffff;
-            font-weight: 600;
-            padding: 10px 15px;
-            text-align: center;
-            flex-shrink: 0; /* 헤더가 줄어들지 않도록 */
-            border-bottom: 1px solid #4a5568;
-        }
-        .table-header > div {
-            padding: 8px 5px;
-            font-size: 0.9rem;
+        /* Table structure using display: table */
+        .comparison-table-wrapper {
+            flex-grow: 1;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            overflow: hidden; /* Ensure this wrapper also doesn't scroll */
+            padding: 0 15px 15px 15px; /* Added padding here to align with header content */
         }
 
-        /* Content area with scroll */
+        .table-header {
+            display: table; /* Use table display */
+            width: 100%;
+            table-layout: fixed; /* Fixed column widths */
+            background-color: #2c3e50; /* Dark background */
+            color: #ffffff;
+            font-weight: 600;
+            /* Removed padding from here, handled by wrapper */
+            flex-shrink: 0; /* Prevent header from shrinking */
+            border-bottom: 1px solid #4a5568;
+        }
+        .table-header .table-cell-header {
+            display: table-cell; /* Use table-cell */
+            padding: 10px 5px;
+            font-size: 0.9rem;
+            text-align: center;
+            vertical-align: middle; /* Vertical center alignment */
+            border-right: 1px solid rgba(255, 255, 255, 0.1); /* Cell separator */
+        }
+        .table-header .table-cell-header:last-child {
+            border-right: none;
+        }
+
         .table-body {
-            flex-grow: 1; /* 남은 공간 모두 차지 */
-            overflow-y: auto; /* 이 부분에만 스크롤이 생김 */
-            padding: 0 15px; /* 좌우 패딩 */
+            display: table; /* Use table display */
+            width: 100%;
+            table-layout: fixed; /* Fixed column widths */
+            flex-grow: 1; /* Take up remaining space */
+            overflow-y: auto; /* Enable vertical scroll for this part */
+            overflow-x: hidden; /* Hide horizontal scroll by default */
+            padding: 0; /* Removed padding from here, handled by wrapper */
         }
 
         .table-row {
-            display: grid;
-            grid-template-columns: 1.5fr 2fr 2fr 0.5fr; /* 구분, 가이드라인, 제안 제품, 준수 여부 */
-            gap: 1px; /* 셀 간격 */
+            display: table-row; /* Use table-row */
             background-color: #ffffff;
             border-bottom: 1px solid #edf2f7;
-            padding: 8px 0; /* 상하 패딩 축소 */
             transition: background-color 0.2s ease;
         }
         .table-row:hover {
@@ -97,37 +113,68 @@
         }
 
         .table-cell {
-            padding: 5px 8px; /* 셀 내부 패딩 축소 */
-            font-size: 0.8rem; /* 폰트 크기 축소 */
+            display: table-cell; /* Use table-cell */
+            padding: 8px 8px; /* Reduced cell padding */
+            font-size: 0.8rem; /* Reduced font size */
             color: #555;
-            display: flex;
-            align-items: flex-start; /* 상단 정렬 */
-            line-height: 1.2; /* 줄 간격 축소 */
+            vertical-align: top; /* Align to top */
+            line-height: 1.2; /* Reduced line height */
+            border-right: 1px solid #f0f2f5; /* Cell separator */
+            word-break: break-word; /* Automatic word break for long words */
+            white-space: normal; /* Allow text to wrap automatically */
+            transition: background-color 0.2s ease; /* Only background transition for all cells */
         }
+        .table-cell:last-child {
+            border-right: none;
+        }
+
+        /* Column specific widths */
+        .col-category { width: 25%; }
+        .col-guideline { width: 43%; }
+        .col-proposed { width: 25%; }
+        .col-compliance { width: 7%; }
+
+        /* Category cell styling */
         .table-cell.category-cell {
             font-weight: 500;
             color: #2c3e50;
-            display: flex;
-            align-items: center; /* 카테고리 셀은 중앙 정렬 */
-            justify-content: flex-start; /* 좌측 정렬 */
-            gap: 5px;
+            vertical-align: middle; /* Vertical center alignment */
+            text-align: left; /* Left alignment */
+            padding-left: 10px; /* Left padding */
+        }
+        /* Style for emoji within category cell */
+        .table-cell.category-cell .emoji {
+            margin-right: 5px; /* Spacing between emoji and text */
+            display: inline-block; /* Keep emoji inline with text */
+            vertical-align: middle; /* Vertical center alignment for emoji */
         }
         .table-cell strong {
             font-weight: 500;
             color: #333;
         }
         .emoji {
-            font-size: 0.9rem; /* 이모티콘 크기 축소 */
-            flex-shrink: 0;
+            font-size: 0.9rem; /* Reduced emoji size */
+            flex-shrink: 0; /* Prevent emoji from shrinking */
         }
         .compliance-cell {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem; /* 체크/엑스 이모티콘 크기 */
+            text-align: center; /* Horizontal center alignment */
+            vertical-align: middle; /* Vertical center alignment */
+            font-size: 1.2rem; /* Check/cross emoji size */
         }
 
-        /* Animations */
+        /* Animation for Proposed Product column */
+        .table-cell.col-proposed {
+            /* Initial state for transition */
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+        .table-cell.col-proposed:hover,
+        .table-cell.col-proposed.highlight-on-hover { /* New class for JS-triggered hover effect */
+            transform: translateY(-2px); /* Slightly lift the cell */
+            box-shadow: 0 0 0 2px #4299e1, 0 4px 10px rgba(0, 0, 0, 0.08); /* Add a subtle blue border and shadow */
+            background-color: #f6f6f6; /* Slightly lighter background on hover */
+        }
+
+        /* Animations for rows */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -178,36 +225,65 @@
             .header p {
                 font-size: 0.9rem;
             }
+            /* Keep table display for header and body */
             .table-header {
-                grid-template-columns: 1fr 1fr 1fr 0.4fr; /* 모바일에서 컬럼 비율 조정 */
-                padding: 8px 10px;
+                display: table; /* Keep table display */
+                width: 100%;
+                table-layout: fixed; /* Keep fixed layout */
+                padding: 0 10px; /* Adjust padding for smaller screens */
             }
-            .table-header > div {
-                font-size: 0.8rem;
-                padding: 5px;
+            .table-header .table-cell-header {
+                display: table-cell; /* Keep table-cell display */
+                vertical-align: middle;
+                padding: 8px 5px;
+                font-size: 0.75rem;
+                border-right: 1px solid rgba(255, 255, 255, 0.1);
             }
+            .table-header .table-cell-header:last-child {
+                border-right: none;
+            }
+
+            /* Table body needs its own overflow-x for horizontal scrolling */
+            .table-body {
+                display: table; /* Keep table display */
+                width: 100%; /* This width will be the *actual* content width, potentially wider than parent */
+                table-layout: fixed; /* Keep fixed layout */
+                flex-grow: 1;
+                overflow-y: auto; /* Vertical scroll for content */
+                overflow-x: auto; /* Horizontal scroll for columns */
+                padding: 0 10px; /* Adjust padding for smaller screens */
+            }
+
             .table-row {
-                grid-template-columns: 1fr 1fr 1fr 0.4fr; /* 모바일에서 컬럼 비율 조정 */
-                padding: 6px 0;
+                display: table-row;
             }
             .table-cell {
-                font-size: 0.7rem; /* 모바일에서 폰트 더 작게 */
-                padding: 3px 5px;
+                display: table-cell;
+                vertical-align: top;
+                padding: 6px 5px; /* Adjust padding for smaller cells */
+                font-size: 0.7rem; /* Smaller font for mobile cells */
+                border-right: 1px solid #f0f2f5;
             }
+            .table-cell:last-child {
+                border-right: none;
+            }
+
+            /* Adjust column widths for mobile */
+            .col-category { width: 25%; }
+            .col-guideline { width: 35%; }
+            .col-proposed { width: 30%; }
+            .col-compliance { width: 10%; }
+
             .table-cell.category-cell {
                 font-size: 0.8rem;
-            }
-            .emoji {
-                font-size: 0.8rem;
+                justify-content: flex-start;
+                /* min-height: unset; removed as it's not needed with fixed table layout */
             }
             .compliance-cell {
                 font-size: 1rem;
             }
             .container {
                 padding: 10px;
-            }
-            .table-body {
-                padding: 0 10px;
             }
         }
     </style>
@@ -219,15 +295,17 @@
             <p>영상유속계 가이드라인 및 제안 제품 비교표</p>
         </header>
 
-        <div class="table-header animated-fade-in" style="animation-delay: 0.3s;">
-            <div>구분 항목</div>
-            <div>가이드라인</div>
-            <div>제안 제품</div>
-            <div>준수</div>
-        </div>
+        <div class="comparison-table-wrapper">
+            <div class="table-header animated-fade-in" style="animation-delay: 0.3s;">
+                <div class="table-cell-header col-category">구분 항목</div>
+                <div class="table-cell-header col-guideline">가이드라인</div>
+                <div class="table-cell-header col-proposed">제안 제품</div>
+                <div class="table-cell-header col-compliance">준수</div>
+            </div>
 
-        <div class="table-body">
-            <!-- Data will be dynamically loaded by JavaScript -->
+            <div class="table-body">
+                <!-- Data will be dynamically loaded by JavaScript -->
+            </div>
         </div>
     </div>
 
@@ -466,17 +544,48 @@
             comparisonData.forEach((item, index) => {
                 const row = document.createElement('div');
                 row.classList.add('table-row', 'animated-fade-in');
-                row.style.animationDelay = `${0.1 * index + 0.4}s`; // Stagger animation
+                // Calculate animation delay for stagger effect
+                row.style.animationDelay = `${0.1 * index + 0.4}s`;
 
-                const complianceEmoji = item.compliant ? '✔️' : '❌'; // 준수 여부 이모티콘
+                // Determine compliance emoji
+                const complianceEmoji = item.compliant ? '✔️' : '❌';
 
+                // Create table cells with appropriate classes
                 row.innerHTML = `
-                    <div class="table-cell category-cell"><span class="emoji">${item.emoji}</span> ${item.category}</div>
-                    <div class="table-cell">${item.guideline}</div>
-                    <div class="table-cell">${item.proposed_product}</div>
-                    <div class="table-cell compliance-cell">${complianceEmoji}</div>
+                    <div class="table-cell category-cell col-category"><span class="emoji">${item.emoji}</span>${item.category}</div>
+                    <div class="table-cell col-guideline">${item.guideline}</div>
+                    <div class="table-cell col-proposed">${item.proposed_product}</div>
+                    <div class="table-cell compliance-cell col-compliance">${complianceEmoji}</div>
                 `;
                 tableBody.appendChild(row);
+            });
+
+            // Add event listeners for hover effect on col-category and col-guideline
+            document.querySelectorAll('.table-row').forEach(row => {
+                const categoryCell = row.querySelector('.col-category');
+                const guidelineCell = row.querySelector('.col-guideline');
+                const proposedCell = row.querySelector('.col-proposed');
+
+                const addHighlight = () => {
+                    if (proposedCell) {
+                        proposedCell.classList.add('highlight-on-hover');
+                    }
+                };
+
+                const removeHighlight = () => {
+                    if (proposedCell) {
+                        proposedCell.classList.remove('highlight-on-hover');
+                    }
+                };
+
+                if (categoryCell) {
+                    categoryCell.addEventListener('mouseover', addHighlight);
+                    categoryCell.addEventListener('mouseout', removeHighlight);
+                }
+                if (guidelineCell) {
+                    guidelineCell.addEventListener('mouseover', addHighlight);
+                    guidelineCell.addEventListener('mouseout', removeHighlight);
+                }
             });
         });
     </script>
