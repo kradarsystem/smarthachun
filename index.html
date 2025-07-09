@@ -3,160 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>소하천 스마트 계측관리 시스템 비교표</title>
+    <title>소하천 스마트 계측관리 시스템 준수 현황</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #ffffff; /* 흰색 배경 */
             color: #333;
-            line-height: 1.6;
+            line-height: 1.3; /* 줄 간격 축소 */
+            overflow: hidden; /* 전체 페이지 스크롤 방지 (iframe 자체 스크롤 방지) */
+            display: flex;
+            flex-direction: column; /* 세로 정렬 */
+            justify-content: flex-start; /* 상단 정렬 */
+            height: 100vh; /* 뷰포트 전체 높이 사용 */
+            padding: 15px; /* 전체 패딩 축소 */
+            box-sizing: border-box;
         }
         .container {
-            max-width: 900px;
+            max-width: 900px; /* 너비 조정 */
+            width: 100%;
             margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: #f0f2f5;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        .header p {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        /* Tab styles */
-        .tabs-container {
+            flex-grow: 1; /* 남은 공간 차지 */
+            display: flex;
+            flex-direction: column;
             background-color: #f9f9f9;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            padding: 20px;
+            overflow: hidden; /* 내부 스크롤 방지 (컨테이너 자체) */
         }
-        .tab-buttons {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            gap: 10px;
-        }
-        .tab-button {
-            padding: 12px 20px;
-            border-radius: 10px;
-            background-color: #e2e8f0;
-            color: #4a5568;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-            flex-grow: 1; /* Allow buttons to grow */
+        .header {
             text-align: center;
-            white-space: nowrap; /* Prevent text wrapping inside button */
-        }
-        .tab-button:hover {
-            background-color: #cbd5e0;
-            transform: translateY(-2px);
-        }
-        .tab-button.active {
-            background-color: #2c3e50;
-            color: #ffffff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-content {
-            display: none;
-            padding-top: 10px; /* Space between tabs and content */
-        }
-        .tab-content.active {
-            display: block;
-            animation: fadeInContent 0.5s ease-out forwards;
-        }
-
-        /* Comparison item styles (reused from previous version) */
-        .comparison-item {
-            background-color: #ffffff; /* Inner background for items */
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f0f2f5;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            flex-shrink: 0; /* 헤더가 줄어들지 않도록 */
         }
-        .comparison-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-        .item-category-title {
-            font-size: 1.3rem;
-            font-weight: 600;
+        .header h1 {
+            font-size: 2rem; /* 헤더 제목 크기 조정 */
+            font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #edf2f7;
+            margin-bottom: 5px; /* 마진 축소 */
+        }
+        .header p {
+            font-size: 0.9rem; /* 헤더 설명 크기 조정 */
+            color: #666;
+        }
+
+        /* Fixed table header */
+        .table-header {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 2fr 0.5fr; /* 구분, 가이드라인, 제안 제품, 준수 여부 */
+            gap: 1px; /* 셀 간격 */
+            background-color: #2c3e50; /* 어두운 배경 */
+            color: #ffffff;
+            font-weight: 600;
+            padding: 10px 15px;
+            text-align: center;
+            flex-shrink: 0; /* 헤더가 줄어들지 않도록 */
+            border-bottom: 1px solid #4a5568;
+        }
+        .table-header > div {
+            padding: 8px 5px;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
         }
-        .item-details {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+
+        /* Content area with scroll */
+        .table-body {
+            flex-grow: 1; /* 남은 공간 모두 차지 */
+            overflow-y: auto; /* 이 부분에만 스크롤이 생김 */
+            padding: 0 15px; /* 좌우 패딩 */
         }
-        .guideline-section,
-        .proposed-product-section {
-            flex: 1;
-            min-width: 250px; /* Slightly smaller min-width for tabs */
-            background-color: #f0f2f5; /* Different background for sections */
-            border-radius: 8px;
-            padding: 12px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 2fr 0.5fr; /* 구분, 가이드라인, 제안 제품, 준수 여부 */
+            gap: 1px; /* 셀 간격 */
+            background-color: #ffffff;
+            border-bottom: 1px solid #edf2f7;
+            padding: 8px 0; /* 상하 패딩 축소 */
+            transition: background-color 0.2s ease;
         }
-        .guideline-section p,
-        .proposed-product-section p {
-            font-size: 0.9rem;
+        .table-row:hover {
+            background-color: #f0f2f5;
+        }
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-cell {
+            padding: 5px 8px; /* 셀 내부 패딩 축소 */
+            font-size: 0.8rem; /* 폰트 크기 축소 */
             color: #555;
             display: flex;
-            align-items: flex-start;
-            gap: 6px;
-            margin-bottom: 0;
+            align-items: flex-start; /* 상단 정렬 */
+            line-height: 1.2; /* 줄 간격 축소 */
         }
-        .guideline-section strong,
-        .proposed-product-section strong {
-            color: #333;
+        .table-cell.category-cell {
             font-weight: 500;
-            flex-shrink: 0;
+            color: #2c3e50;
+            display: flex;
+            align-items: center; /* 카테고리 셀은 중앙 정렬 */
+            justify-content: flex-start; /* 좌측 정렬 */
+            gap: 5px;
+        }
+        .table-cell strong {
+            font-weight: 500;
+            color: #333;
         }
         .emoji {
-            font-size: 1rem;
+            font-size: 0.9rem; /* 이모티콘 크기 축소 */
             flex-shrink: 0;
+        }
+        .compliance-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem; /* 체크/엑스 이모티콘 크기 */
         }
 
         /* Animations */
-        @keyframes fadeInContent {
+        @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes fadeInHeader {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .header {
-            animation: fadeInHeader 0.8s ease-out forwards;
-        }
-        .tabs-container {
-            animation: fadeInContent 1s ease-out forwards;
-            animation-delay: 0.2s;
+        .animated-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
             opacity: 0;
         }
+        /* Stagger animation for rows */
+        .table-row:nth-child(1) { animation-delay: 0.1s; }
+        .table-row:nth-child(2) { animation-delay: 0.2s; }
+        .table-row:nth-child(3) { animation-delay: 0.3s; }
+        .table-row:nth-child(4) { animation-delay: 0.4s; }
+        .table-row:nth-child(5) { animation-delay: 0.5s; }
+        .table-row:nth-child(6) { animation-delay: 0.6s; }
+        .table-row:nth-child(7) { animation-delay: 0.7s; }
+        .table-row:nth-child(8) { animation-delay: 0.8s; }
+        .table-row:nth-child(9) { animation-delay: 0.9s; }
+        .table-row:nth-child(10) { animation-delay: 1.0s; }
+        .table-row:nth-child(11) { animation-delay: 1.1s; }
+        .table-row:nth-child(12) { animation-delay: 1.2s; }
+        .table-row:nth-child(13) { animation-delay: 1.3s; }
+        .table-row:nth-child(14) { animation-delay: 1.4s; }
+        .table-row:nth-child(15) { animation-delay: 1.5s; }
+        .table-row:nth-child(16) { animation-delay: 1.6s; }
+        .table-row:nth-child(17) { animation-delay: 1.7s; }
+        .table-row:nth-child(18) { animation-delay: 1.8s; }
+        .table-row:nth-child(19) { animation-delay: 1.9s; }
+        .table-row:nth-child(20) { animation-delay: 2.0s; }
+        .table-row:nth-child(21) { animation-delay: 2.1s; }
+        .table-row:nth-child(22) { animation-delay: 2.2s; }
+        .table-row:nth-child(23) { animation-delay: 2.3s; }
+        .table-row:nth-child(24) { animation-delay: 2.4s; }
+        .table-row:nth-child(25) { animation-delay: 2.5s; }
+        .table-row:nth-child(26) { animation-delay: 2.6s; }
+        .table-row:nth-child(27) { animation-delay: 2.7s; }
+        .table-row:nth-child(28) { animation-delay: 2.8s; }
+        .table-row:nth-child(29) { animation-delay: 2.9s; }
+        .table-row:nth-child(30) { animation-delay: 3.0s; }
+        .table-row:nth-child(31) { animation-delay: 3.1s; }
+
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
@@ -164,449 +176,308 @@
                 font-size: 1.8rem;
             }
             .header p {
+                font-size: 0.9rem;
+            }
+            .table-header {
+                grid-template-columns: 1fr 1fr 1fr 0.4fr; /* 모바일에서 컬럼 비율 조정 */
+                padding: 8px 10px;
+            }
+            .table-header > div {
+                font-size: 0.8rem;
+                padding: 5px;
+            }
+            .table-row {
+                grid-template-columns: 1fr 1fr 1fr 0.4fr; /* 모바일에서 컬럼 비율 조정 */
+                padding: 6px 0;
+            }
+            .table-cell {
+                font-size: 0.7rem; /* 모바일에서 폰트 더 작게 */
+                padding: 3px 5px;
+            }
+            .table-cell.category-cell {
+                font-size: 0.8rem;
+            }
+            .emoji {
+                font-size: 0.8rem;
+            }
+            .compliance-cell {
                 font-size: 1rem;
             }
-            .tab-buttons {
-                flex-direction: column; /* Stack buttons vertically on small screens */
-            }
-            .tab-button {
-                flex-grow: unset; /* Remove flex-grow for stacked buttons */
-                width: 100%; /* Full width for stacked buttons */
-            }
-            .item-category-title {
-                font-size: 1.1rem;
-            }
-            .item-details {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .guideline-section,
-            .proposed-product-section {
-                min-width: unset;
+            .container {
                 padding: 10px;
             }
-            .guideline-section p,
-            .proposed-product-section p {
-                font-size: 0.8rem;
+            .table-body {
+                padding: 0 10px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1>🌊 소하천 스마트 계측관리 시스템 📊</h1>
+        <header class="header animated-fade-in">
+            <h1>🌊 소하천 스마트 계측관리 시스템 준수 현황 📊</h1>
             <p>영상유속계 가이드라인 및 제안 제품 비교표</p>
         </header>
 
-        <div class="tabs-container">
-            <div class="tab-buttons">
-                <div class="tab-button active" data-tab="basic-requirements">✨ 기본 요구사항</div>
-                <div class="tab-button" data-tab="measurement-control">⚙️ 계측 및 제어</div>
-                <div class="tab-button" data-tab="system-infrastructure">🏗️ 시스템 인프라</div>
-                <div class="tab-button" data-tab="monitoring-security">👁️ 감시 및 보안</div>
-            </div>
+        <div class="table-header animated-fade-in" style="animation-delay: 0.3s;">
+            <div>구분 항목</div>
+            <div>가이드라인</div>
+            <div>제안 제품</div>
+            <div>준수</div>
+        </div>
 
-            <!-- 기본 요구사항 탭 내용 -->
-            <div id="basic-requirements" class="tab-content active">
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">✅</span> 계측값 신뢰성 확보</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📋</span> <strong>가이드라인:</strong> 국가인증 또는 공공기관 성능확인 자료 제시</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📝</span> <strong>제안 제품:</strong> Kwater 기술성능확인서, 수자원조사기술원 기술/제품 성능확인서, 소프트웨어 품질인증서</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🏆</span> TTA 인증 제품</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🏅</span> <strong>가이드라인:</strong> TTA 인증 제품 사용</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">✅</span> <strong>제안 제품:</strong> TTA 인증 제품 사용</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">📊</span> 유량 측정 불확도</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📋</span> <strong>가이드라인:</strong> 소하천 계측자료 표준 형식에 포함</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">✔️</span> <strong>제안 제품:</strong> GUM 기반 표준 불확도 산정 가능</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 계측 및 제어 탭 내용 -->
-            <div id="measurement-control" class="tab-content">
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">⏱️</span> 유속 계측 - 계측 간격</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">⏱️</span> <strong>가이드라인:</strong> 2분 이내</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⏱️</span> <strong>제안 제품:</strong> 2분</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🔍</span> 유속 계측 - 분해능</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📏</span> <strong>가이드라인:</strong> 1cm/s</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⬆️</span> <strong>제안 제품:</strong> 1cm/s 이상</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">⏳</span> 유속 계측 - 최소 계측 시간</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">⏱️</span> <strong>가이드라인:</strong> 10초 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⏱️</span> <strong>제안 제품:</strong> 30초 이상</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">↔️</span> 유속 계측 - 횡방향 측선 수</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🔢</span> <strong>가이드라인:</strong> 22개 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🔢</span> <strong>제안 제품:</strong> 22~30개</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">💧</span> 수위 계측 - 신뢰성 확보</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📋</span> <strong>가이드라인:</strong> 공공기관 검정자료 제시</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📝</span> <strong>제안 제품:</strong> 수위계 검정서</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">⏱️</span> 수위 계측 - 계측 간격</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">⏱️</span> <strong>가이드라인:</strong> 1분 이내</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⏱️</span> <strong>제안 제품:</strong> 1분</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🔍</span> 수위 계측 - 분해능</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📏</span> <strong>가이드라인:</strong> 1mm</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📏</span> <strong>제안 제품:</strong> 1mm</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">⏳</span> 수위 계측 - 최소 계측 시간</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">⏱️</span> <strong>가이드라인:</strong> 10초 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⏱️</span> <strong>제안 제품:</strong> 30초 이상</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">⌨️</span> 현장 제어 장비</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🖥️</span> <strong>가이드라인:</strong> 현장 설치 및 제어를 위한 입력장치, 계측결과 현장확인을 위한 출력장치 포함</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🖱️</span> <strong>제안 제품:</strong> 현장 내 키보드, 마우스, USB 입력 장치, 현장 모니터 포함</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">📡</span> 원격 제어 기능</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🌐</span> <strong>가이드라인:</strong> 원격제어 기능 포함</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🔗</span> <strong>제안 제품:</strong> 고정 IP 활용 원격제어 기능 포함</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 시스템 인프라 탭 내용 -->
-            <div id="system-infrastructure" class="tab-content">
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">💾</span> 영상 저장 기간</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🗓️</span> <strong>가이드라인:</strong> 1개월 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🎞️</span> <strong>제안 제품:</strong> 1080p 영상 1개월 이상 저장</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🗄️</span> 저장 장비</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">💾</span> <strong>가이드라인:</strong> 계측자료 저장기간 6개월 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📊</span> <strong>제안 제품:</strong> 재난안전연구원 플랫폼 양식(텍스트)으로 6개월 이상 저장</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🛡️</span> 보호 장비</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">💪</span> <strong>가이드라인:</strong> 시스템과 장비가 정상적으로 작동할 정도의 내구성</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🔩</span> <strong>제안 제품:</strong> 스틸 함체 사용, 내열성이 강한 이중판 구조 사용, 스테인리스</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🌡️</span> 항온 장비</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">❄️🔥</span> <strong>가이드라인:</strong> 폭염과 혹한에 정상 가동하도록 온도 조절장치 설치</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⚙️</span> <strong>제안 제품:</strong> 함체 내 환풍기 및 히터 사용, 온도에 작동 및 정지하는 기능 포함</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🔋</span> 보조 전원</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">⚡</span> <strong>가이드라인:</strong> 정전 시 2시간 이상 무전원 공급</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🔌</span> <strong>제안 제품:</strong> 입력 전원 없이 2시간 사용 가능한 무정전 전원 공급 장치 설치</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 감시 및 보안 탭 내용 -->
-            <div id="monitoring-security" class="tab-content">
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🖼️</span> 현장 감시 - 해상도</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📺</span> <strong>가이드라인:</strong> 1920x1080 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📺</span> <strong>제안 제품:</strong> 1920x1080</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🎥</span> 현장 감시 - 프레임 수</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🎞️</span> <strong>가이드라인:</strong> 초당 30프레임 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🎞️</span> <strong>제안 제품:</strong> 초당 30프레임 촬영</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🔄</span> 현장 감시 - PTZ 기능</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🕹️</span> <strong>가이드라인:</strong> PTZ 기능 포함</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📡</span> <strong>제안 제품:</strong> 원격 PTZ 기능</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">📡</span> 현장 감시 - 전송 방식</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🌐</span> <strong>가이드라인:</strong> 네트워크 IP</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🔗</span> <strong>제안 제품:</strong> 네트워크 IP 카메라 사용</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">💡</span> 조명 장비 - 조도 감지</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">☀️</span> <strong>가이드라인:</strong> 현장 조도 자동 감지하여 전원 공급</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⚙️</span> <strong>제안 제품:</strong> 조도 감지형 자동 점멸기 설치</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🔆</span> 조명 장비 - 조도</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">💡</span> <strong>가이드라인:</strong> 1,000Lux 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">💡</span> <strong>제안 제품:</strong> 수면 조도 1,000Lux 이상</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🎨</span> 조명 장비 - 색상</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">⚪</span> <strong>가이드라인:</strong> 주백색</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⚪</span> <strong>제안 제품:</strong> 주백색</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">⚡</span> 조명 장비 - 전력</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🔌</span> <strong>가이드라인:</strong> 50W 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">🔌</span> <strong>제안 제품:</strong> 50W</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🏗️</span> 강관주 - 두께</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📏</span> <strong>가이드라인:</strong> 2mm 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📏</span> <strong>제안 제품:</strong> 4mm 강관주 사용</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">📏</span> 강관주 - 지름</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">⭕</span> <strong>가이드라인:</strong> 20cm 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">⭕</span> <strong>제안 제품:</strong> 216mm 강관주 사용</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">⬆️</span> 강관주 - 높이</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📏</span> <strong>가이드라인:</strong> 6m 이상</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📏</span> <strong>제안 제품:</strong> 6m 강관주 사용</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🛡️</span> 강관주 - 도금</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">✨</span> <strong>가이드라인:</strong> 아연도금</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">✨</span> <strong>제안 제품:</strong> 아연도금</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">⚡</span> 보안 장비 - 피뢰침</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">📏</span> <strong>가이드라인:</strong> 피뢰침 총 길이 500mm 이상 설치</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">📏</span> <strong>제안 제품:</strong> 피뢰침 총 길이 510mm</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comparison-item">
-                    <h3 class="item-category-title"><span class="emoji">🔒</span> 보안 장비 - 지정 장비</h3>
-                    <div class="item-details">
-                        <div class="guideline-section">
-                            <p><span class="emoji">🛡️</span> <strong>가이드라인:</strong> 지정 보안 장비 사용 (Ahnlab Trusguard 50B)</p>
-                        </div>
-                        <div class="proposed-product-section">
-                            <p><span class="emoji">✅</span> <strong>제안 제품:</strong> Ahnlab Trusguard 50B 사용</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="table-body">
+            <!-- Data will be dynamically loaded by JavaScript -->
         </div>
     </div>
 
     <script>
+        // Data extracted from the PDF
+        const comparisonData = [
+            {
+                "category": "계측값 신뢰성 확보",
+                "guideline": "국가인증 또는 공공기관 성능확인 자료 제시",
+                "proposed_product": "Kwater 기술성능확인서, 수자원조사기술원 기술/제품 성능확인서, 소프트웨어 품질인증서",
+                "emoji": "✅",
+                "compliant": true
+            },
+            {
+                "category": "TTA 인증 제품",
+                "guideline": "TTA 인증 제품 사용",
+                "proposed_product": "TTA 인증 제품 사용",
+                "emoji": "🏆",
+                "compliant": true
+            },
+            {
+                "category": "유량 측정 불확도",
+                "guideline": "소하천 계측자료 표준 형식에 포함",
+                "proposed_product": "GUM 기반 표준 불확도 산정 가능",
+                "emoji": "📊",
+                "compliant": true
+            },
+            {
+                "category": "유속 계측 - 계측 간격",
+                "guideline": "2분 이내",
+                "proposed_product": "2분",
+                "emoji": "⏱️",
+                "compliant": true
+            },
+            {
+                "category": "유속 계측 - 분해능",
+                "guideline": "1cm/s",
+                "proposed_product": "1cm/s 이상",
+                "emoji": "🔍",
+                "compliant": true
+            },
+            {
+                "category": "유속 계측 - 최소 계측 시간",
+                "guideline": "10초 이상",
+                "proposed_product": "30초 이상",
+                "emoji": "⏳",
+                "compliant": true
+            },
+            {
+                "category": "유속 계측 - 횡방향 측선 수",
+                "guideline": "22개 이상",
+                "proposed_product": "22~30개",
+                "emoji": "↔️",
+                "compliant": true
+            },
+            {
+                "category": "수위 계측 - 신뢰성 확보",
+                "guideline": "공공기관 검정자료 제시",
+                "proposed_product": "수위계 검정서",
+                "emoji": "💧",
+                "compliant": true
+            },
+            {
+                "category": "수위 계측 - 계측 간격",
+                "guideline": "1분 이내",
+                "proposed_product": "1분",
+                "emoji": "⏱️",
+                "compliant": true
+            },
+            {
+                "category": "수위 계측 - 분해능",
+                "guideline": "1mm",
+                "proposed_product": "1mm",
+                "emoji": "🔍",
+                "compliant": true
+            },
+            {
+                "category": "수위 계측 - 최소 계측 시간",
+                "guideline": "10초 이상",
+                "proposed_product": "30초 이상",
+                "emoji": "⏳",
+                "compliant": true
+            },
+            {
+                "category": "현장 제어 장비",
+                "guideline": "현장 설치 및 제어를 위한 입력장치, 계측결과 현장확인을 위한 출력장치 포함",
+                "proposed_product": "현장 내 키보드, 마우스, USB 입력 장치, 현장 모니터 포함",
+                "emoji": "⌨️",
+                "compliant": true
+            },
+            {
+                "category": "원격 제어 기능",
+                "guideline": "원격제어 기능 포함",
+                "proposed_product": "고정 IP 활용 원격제어 기능 포함",
+                "emoji": "📡",
+                "compliant": true
+            },
+            {
+                "category": "영상 저장 기간",
+                "guideline": "1개월 이상",
+                "proposed_product": "1080p 영상 1개월 이상 저장",
+                "emoji": "💾",
+                "compliant": true
+            },
+            {
+                "category": "저장 장비",
+                "guideline": "계측자료 저장기간 6개월 이상",
+                "proposed_product": "재난안전연구원 플랫폼 양식(텍스트)으로 6개월 이상 저장",
+                "emoji": "🗄️",
+                "compliant": true
+            },
+            {
+                "category": "보호 장비",
+                "guideline": "시스템과 장비가 정상적으로 작동할 정도의 내구성",
+                "proposed_product": "스틸 함체 사용, 내열성이 강한 이중판 구조 사용, 스테인리스",
+                "emoji": "🛡️",
+                "compliant": true
+            },
+            {
+                "category": "항온 장비",
+                "guideline": "폭염과 혹한에 정상 가동하도록 온도 조절장치 설치",
+                "proposed_product": "함체 내 환풍기 및 히터 사용, 온도에 작동 및 정지하는 기능 포함",
+                "emoji": "🌡️",
+                "compliant": true
+            },
+            {
+                "category": "보조 전원",
+                "guideline": "정전 시 2시간 이상 무전원 공급",
+                "proposed_product": "입력 전원 없이 2시간 사용 가능한 무정전 전원 공급 장치 설치",
+                "emoji": "🔋",
+                "compliant": true
+            },
+            {
+                "category": "현장 감시 - 해상도",
+                "guideline": "1920x1080 이상",
+                "proposed_product": "1920x1080",
+                "emoji": "🖼️",
+                "compliant": true
+            },
+            {
+                "category": "현장 감시 - 프레임 수",
+                "guideline": "초당 30프레임 이상",
+                "proposed_product": "초당 30프레임 촬영",
+                "emoji": "🎥",
+                "compliant": true
+            },
+            {
+                "category": "현장 감시 - PTZ 기능",
+                "guideline": "PTZ 기능 포함",
+                "proposed_product": "원격 PTZ 기능",
+                "emoji": "🔄",
+                "compliant": true
+            },
+            {
+                "category": "현장 감시 - 전송 방식",
+                "guideline": "네트워크 IP",
+                "proposed_product": "네트워크 IP 카메라 사용",
+                "emoji": "📡",
+                "compliant": true
+            },
+            {
+                "category": "조명 장비 - 조도 감지",
+                "guideline": "현장 조도 자동 감지하여 전원 공급",
+                "proposed_product": "조도 감지형 자동 점멸기 설치",
+                "emoji": "💡",
+                "compliant": true
+            },
+            {
+                "category": "조명 장비 - 조도",
+                "guideline": "1,000Lux 이상",
+                "proposed_product": "수면 조도 1,000Lux 이상",
+                "emoji": "🔆",
+                "compliant": true
+            },
+            {
+                "category": "조명 장비 - 색상",
+                "guideline": "주백색",
+                "proposed_product": "주백색",
+                "emoji": "🎨",
+                "compliant": true
+            },
+            {
+                "category": "조명 장비 - 전력",
+                "guideline": "50W 이상",
+                "proposed_product": "50W",
+                "emoji": "⚡",
+                "compliant": true
+            },
+            {
+                "category": "강관주 - 두께",
+                "guideline": "2mm 이상",
+                "proposed_product": "4mm 강관주 사용",
+                "emoji": "🏗️",
+                "compliant": true
+            },
+            {
+                "category": "강관주 - 지름",
+                "guideline": "20cm 이상",
+                "proposed_product": "216mm 강관주 사용",
+                "emoji": "📏",
+                "compliant": true
+            },
+            {
+                "category": "강관주 - 높이",
+                "guideline": "6m 이상",
+                "proposed_product": "6m 강관주 사용",
+                "emoji": "⬆️",
+                "compliant": true
+            },
+            {
+                "category": "강관주 - 도금",
+                "guideline": "아연도금",
+                "proposed_product": "아연도금",
+                "emoji": "🛡️",
+                "compliant": true
+            },
+            {
+                "category": "보안 장비 - 피뢰침",
+                "guideline": "피뢰침 총 길이 500mm 이상 설치",
+                "proposed_product": "피뢰침 총 길이 510mm",
+                "emoji": "⚡",
+                "compliant": true
+            },
+            {
+                "category": "보안 장비 - 지정 장비",
+                "guideline": "지정 보안 장비 사용 (Ahnlab Trusguard 50B)",
+                "proposed_product": "Ahnlab Trusguard 50B 사용",
+                "emoji": "🔒",
+                "compliant": true
+            }
+        ];
+
         document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
+            const tableBody = document.querySelector('.table-body');
 
-            // Function to show a specific tab
-            function showTab(tabId) {
-                tabContents.forEach(content => {
-                    content.classList.remove('active');
-                });
-                tabButtons.forEach(button => {
-                    button.classList.remove('active');
-                });
+            comparisonData.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.classList.add('table-row', 'animated-fade-in');
+                row.style.animationDelay = `${0.1 * index + 0.4}s`; // Stagger animation
 
-                document.getElementById(tabId).classList.add('active');
-                document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
-            }
+                const complianceEmoji = item.compliant ? '✔️' : '❌'; // 준수 여부 이모티콘
 
-            // Add click event listeners to tab buttons
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const tabId = this.dataset.tab;
-                    showTab(tabId);
-                });
+                row.innerHTML = `
+                    <div class="table-cell category-cell"><span class="emoji">${item.emoji}</span> ${item.category}</div>
+                    <div class="table-cell">${item.guideline}</div>
+                    <div class="table-cell">${item.proposed_product}</div>
+                    <div class="table-cell compliance-cell">${complianceEmoji}</div>
+                `;
+                tableBody.appendChild(row);
             });
-
-            // Initially show the first tab
-            if (tabButtons.length > 0) {
-                showTab(tabButtons[0].dataset.tab);
-            }
         });
     </script>
 </body>
